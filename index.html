@@ -41,7 +41,7 @@ button {
     cursor: pointer;
     position: relative;
     transition: all 0.5s ease;
-    white-space: nowrap; /* prevent wrapping */
+    white-space: nowrap;
 }
 
 #yes {
@@ -59,8 +59,7 @@ button {
 
 #fist {
     position: absolute;
-    width: 60px;
-    transform: scale(1) rotate(0deg);
+    font-size: 60px; /* bigger than normal emoji */
     right: 50px;
     top: 0;
     display: none;
@@ -81,7 +80,7 @@ button {
     100% { transform: translateY(-100px) scale(1); opacity:0;}
 }
 
-/* 3D fist shake animation */
+/* Fist shake animation */
 @keyframes fistShake {
     0% {transform: translateX(0) rotate(0deg) scale(1);}
     20% {transform: translateX(-10px) rotate(-15deg) scale(1.1);}
@@ -102,7 +101,8 @@ button {
   <button id="no" onclick="noClicked()">NO 😭</button>
 </div>
 
-<img src="fist.png" id="fist" alt="fist">
+<!-- Fist emoji -->
+<div id="fist">👊</div>
 
 <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
 
@@ -131,7 +131,7 @@ function createHeart() {
 
 // NO click
 function noClicked() {
-  if(noClicks >= 10) return; // max 10 clicks
+  if(noClicks >= 10) return; 
   noClicks++;
 
   // Update NO text
@@ -166,11 +166,9 @@ function noClicked() {
 // YES click
 function yesClicked() {
   if(noBtn.style.display !== "none") {
-    // Push NO right
     let currentShift = parseInt(noBtn.style.transform.replace(/[^0-9\-]/g,'')) || 0;
     let newShift = currentShift + 30;
     noBtn.style.transform = `translateX(${newShift}px)`;
-    // Expand YES
     yesBtn.style.width = Math.min(yesBtn.offsetWidth + 20, window.innerWidth - 50) + "px";
   }
 
