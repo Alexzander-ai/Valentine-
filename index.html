@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Will You Be My Valentine🌹🌹?</title>
+<title>Will You Be My Valentine? 💖🥰</title>
 
 <style>
 body {
@@ -113,17 +113,17 @@ button {
 
 <body>
 
-<!-- 🎵 BACKGROUND MUSIC (persistent, loops, fade-in) -->
+<!-- 🎵 BACKGROUND MUSIC -->
 <audio id="bgMusic" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
 
-<h1>Will you be my Valentine?</h1>
+<h1>Will you be my Valentine? 💖🥰</h1>
 <img src="sad.webp" id="sadImage">
 
 <div id="buttonContainer">
-    <button id="yes" onclick="yesClicked()">YES 💖</button>
-    <button id="no" onclick="noClicked()">NO 😭</button>
+    <button id="yes">YES 💖</button>
+    <button id="no">NO 😭</button>
 </div>
 
 <div id="fist">👊</div>
@@ -131,93 +131,92 @@ button {
 <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
 <script>
-/* 🎵 PLAY MUSIC ON FIRST TAP + FADE IN */
 const bgMusic = document.getElementById("bgMusic");
 bgMusic.volume = 0;
 document.addEventListener("click", () => {
-  if (bgMusic.paused) {
+  if(bgMusic.paused){
     bgMusic.play().catch(()=>{});
     let vol = 0;
-    const fadeIn = setInterval(() => {
+    const fadeIn = setInterval(()=>{
       vol += 0.02;
-      if(vol >= 0.5) { vol = 0.5; clearInterval(fadeIn); }
+      if(vol >= 0.5){ vol=0.5; clearInterval(fadeIn);}
       bgMusic.volume = vol;
-    }, 100);
+    },100);
   }
-}, { once: true });
+},{once:true});
 
 let noClicks = 0;
 const messages = [
   "No 😭","Please 🥺","Don’t 😫","Babe 😢",
   "No 😭","Say yes 🥺","I beg u 😫","Babe 😢",
   "I'd die 😭","Please 🥺","Ughhh😒🙄😡"
+];
 
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 const fist = document.getElementById("fist");
 
 /* HEARTS */
-function createHeart() {
+function createHeart(){
   const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerText = "❤️";
+  heart.className="heart";
+  heart.innerText="❤️";
   heart.style.left = yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth + "px";
   heart.style.top = yesBtn.offsetTop + "px";
   document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 3000);
+  setTimeout(()=>heart.remove(),3000);
 }
 
 /* NO CLICK */
-function noClicked() {
-  if (noClicks >= 10) return;
+noBtn.addEventListener("click", ()=>{
+  if(noClicks>=10) return;
   noClicks++;
-
-  noBtn.innerText = messages[noClicks - 1];
-  yesBtn.style.width =
-    Math.min(220 + noClicks * 18, window.innerWidth - 40) + "px";
-
+  noBtn.innerText = messages[noClicks-1];
+  yesBtn.style.width = Math.min(220+noClicks*18,window.innerWidth-40)+"px";
   createHeart();
 
-  if (noClicks === 10) {
+  if(noClicks===10){
     const rect = noBtn.getBoundingClientRect();
     fist.style.display = "block";
-    fist.style.setProperty("--hit-x", rect.left + "px");
-    fist.style.setProperty("--hit-y", rect.top + "px");
+    fist.style.setProperty("--hit-x", rect.left+"px");
+    fist.style.setProperty("--hit-y", rect.top+"px");
     fist.style.animation = "fistPunch 0.9s ease-out forwards";
     yesBtn.style.animation = "yesBounce 0.6s";
     noBtn.style.animation = "noShake 0.6s";
 
-    setTimeout(() => {
-      noBtn.style.display = "none";
-      fist.style.display = "none";
-      yesBtn.style.width = window.innerWidth - 40 + "px";
-      yesBtn.style.fontSize = "38px";
-    }, 900);
+    setTimeout(()=>{
+      noBtn.style.display="none";
+      fist.style.display="none";
+      yesBtn.style.width=window.innerWidth-40+"px";
+      yesBtn.style.fontSize="38px";
+    },900);
   }
-}
+});
 
 /* YES CLICK */
-function yesClicked() {
-  // ✅ Always works no matter what
-  document.body.innerHTML += `
-    <div style="text-align:center;padding-top:60px;">
-      <h1 style="font-size:5em;">Yahhhh ❤️🌹🥳✨</h1>
-      <p style="font-size:3em;">I love you..</p>
-      <img src="happy.webp" style="max-width:90%;border-radius:22px;">
-      <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;">
-      </canvas>
-    </div>`;
+yesBtn.addEventListener("click", ()=>{
+  // Always works anytime
+  const finalScreen = document.createElement("div");
+  finalScreen.style.textAlign="center";
+  finalScreen.style.paddingTop="60px";
+  finalScreen.innerHTML = `
+    <h1 style="font-size:5em;">Yahhhh ❤️🌹🥳✨</h1>
+    <p style="font-size:3em;">I love you..</p>
+    <img src="happy.webp" style="max-width:90%;border-radius:22px;">
+    <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
+  `;
+  document.body.appendChild(finalScreen);
   startConfetti();
-}
+});
 
 /* CONFETTI */
-function startConfetti() {
-  const canvas = document.getElementById("confettiCanvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
+function startConfetti(){
+  const canvas=document.getElementById("confettiCanvas");
+  const ctx=canvas.getContext("2d");
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
 
-  const confetti = Array.from({length:120}, () => ({
+  const confetti = Array.from({length:120}, ()=>({
     x: Math.random()*canvas.width,
     y: Math.random()*canvas.height,
     r: Math.random()*6+4,
@@ -226,20 +225,20 @@ function startConfetti() {
   }));
 
   let angle = 0;
-  setInterval(() => {
+  setInterval(()=>{
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    angle += 0.01;
-    confetti.forEach(c => {
+    angle+=0.01;
+    confetti.forEach(c=>{
       ctx.beginPath();
-      ctx.strokeStyle = c.color;
-      ctx.lineWidth = c.r;
-      ctx.moveTo(c.x, c.y);
-      ctx.lineTo(c.x + 2, c.y + c.r*2);
+      ctx.strokeStyle=c.color;
+      ctx.lineWidth=c.r;
+      ctx.moveTo(c.x,c.y);
+      ctx.lineTo(c.x+2,c.y+c.r*2);
       ctx.stroke();
-      c.y += Math.cos(angle + c.d) + 3;
-      if (c.y > canvas.height) c.y = -10;
+      c.y+=Math.cos(angle+c.d)+3;
+      if(c.y>canvas.height) c.y=-10;
     });
-  }, 20);
+  },20);
 }
 </script>
 
