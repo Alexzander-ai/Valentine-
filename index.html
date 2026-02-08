@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Will You Be My Valentine? 🌹💖🥰</title>
+<title>Will You Be My Valentine? 💖🥰</title>
 
 <style>
 body {
@@ -118,12 +118,14 @@ button {
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
 
+<div id="mainContent">
 <h1>Will you be my Valentine? 💖🥰</h1>
 <img src="sad.webp" id="sadImage">
 
 <div id="buttonContainer">
     <button id="yes">YES 💖</button>
     <button id="no">NO 😭</button>
+</div>
 </div>
 
 <div id="fist">👊</div>
@@ -155,6 +157,7 @@ const messages = [
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 const fist = document.getElementById("fist");
+const mainContent = document.getElementById("mainContent");
 
 /* HEARTS */
 function createHeart(){
@@ -195,13 +198,20 @@ noBtn.addEventListener("click", ()=>{
 
 /* YES CLICK */
 yesBtn.addEventListener("click", ()=>{
-  // ✅ Fully replace body to prevent spamming YES or NO
-  document.body.innerHTML = `
-    <h1 style="text-align:center;font-size:5em;margin-top:60px;">Yahhhh ❤️🌹🥳✨</h1>
-    <p style="text-align:center;font-size:3em;">I love you..</p>
-    <img src="happy.webp" style="display:block;margin:30px auto;max-width:90%;border-radius:22px;">
+  // Hide buttons & GIF but keep audio
+  mainContent.style.display = "none";
+
+  // Show final screen
+  const finalScreen = document.createElement("div");
+  finalScreen.style.textAlign="center";
+  finalScreen.style.paddingTop="60px";
+  finalScreen.innerHTML = `
+    <h1 style="font-size:5em;">Yahhhh ❤️🌹🥳✨</h1>
+    <p style="font-size:3em;">I love you..</p>
+    <img src="happy.webp" style="max-width:90%;border-radius:22px;margin-top:30px;">
     <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
   `;
+  document.body.appendChild(finalScreen);
   startConfetti();
 });
 
