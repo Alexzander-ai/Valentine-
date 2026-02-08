@@ -118,6 +118,7 @@ const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 const fist = document.getElementById("fist");
 
+// Floating hearts
 function createHeart() {
   const heart = document.createElement('div');
   heart.className = 'heart';
@@ -128,6 +129,7 @@ function createHeart() {
   setTimeout(() => heart.remove(), 3000);
 }
 
+// NO click
 function noClicked() {
   if(noClicks >= 10) return; // max 10 clicks
   noClicks++;
@@ -146,13 +148,12 @@ function noClicked() {
   // Floating hearts
   createHeart();
 
-  // Fist animation at 10th click
+  // Fist animation on 10th click
   if(noClicks === 10) {
     fist.style.display = "block";
     fist.style.top = yesBtn.offsetTop + "px";
     fist.style.right = "50px";
     fist.style.animation = "fistShake 1.2s forwards";
-    // NO button disappears after fist hits
     setTimeout(() => {
       noBtn.style.display = "none";
       fist.style.display = "none";
@@ -162,27 +163,32 @@ function noClicked() {
   }
 }
 
+// YES click
 function yesClicked() {
-  // Push NO slightly on each YES click if NO exists
   if(noBtn.style.display !== "none") {
+    // Push NO right
     let currentShift = parseInt(noBtn.style.transform.replace(/[^0-9\-]/g,'')) || 0;
     let newShift = currentShift + 30;
     noBtn.style.transform = `translateX(${newShift}px)`;
+    // Expand YES
     yesBtn.style.width = Math.min(yesBtn.offsetWidth + 20, window.innerWidth - 50) + "px";
   }
 
-  // Show happy ending
-  document.body.innerHTML = `
-    <div style="text-align:center; padding-top:60px;">
-      <h1>Yahhhh ❤️🌹🥳 🎉 ✨️</h1>
-      <p>I love you..</p>
-      <img src="happy.webp" style="max-width:90%; border-radius:20px;">
-      <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
-    </div>
-  `;
-  startConfetti();
+  // Final happy ending
+  if(noBtn.style.display === "none") {
+    document.body.innerHTML = `
+      <div style="text-align:center; padding-top:60px;">
+        <h1>Yahhhh ❤️🌹🥳 🎉 ✨️</h1>
+        <p>I love you..</p>
+        <img src="happy.webp" style="max-width:90%; border-radius:20px;">
+        <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+      </div>
+    `;
+    startConfetti();
+  }
 }
 
+// Confetti
 function startConfetti() {
   const canvas = document.getElementById('confettiCanvas');
   const ctx = canvas.getContext('2d');
