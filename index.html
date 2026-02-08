@@ -2,16 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Be My Valentine 💖</title>
+<title>Will You Be My Valentine?</title>
 <style>
   body {
     font-family: Arial, sans-serif;
     text-align: center;
     background: pink;
-    padding-top: 100px;
+    padding-top: 50px;
+    overflow-x: hidden;
+    position: relative;
   }
   h1 {
-    font-size: 2.5em;
+    font-size: 2em;
+  }
+  img {
+    max-width: 200px;
+    margin: 20px 0;
   }
   button {
     font-size: 20px;
@@ -20,59 +26,176 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
   }
   #yes {
     background: red;
     color: white;
     font-size: 22px;
+    width: 150px;
   }
   #no {
     background: white;
     color: black;
+    width: 150px;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: float 3s linear infinite;
+  }
+  @keyframes float {
+    0% { transform: translateY(0) scale(1); opacity:1;}
+    50% { transform: translateY(-50px) scale(1.2); opacity:0.8;}
+    100% { transform: translateY(-100px) scale(1); opacity:0;}
   }
 </style>
 </head>
-
 <body>
 
-<h1>Will you be my Valentine? 💘</h1>
+<h1>Will you be my Valentine?</h1>
+<img src="sad.webp" alt="Please GIF" id="sadImage">
 
-<button id="yes" onclick="yesClicked()">YES 💖</button>
-<button id="no" onclick="noClicked()">NO 😭</button>
+<div>
+  <button id="yes" onclick="yesClicked()">YES 💖</button>
+  <button id="no" onclick="noClicked()">NO 😭</button>
+</div>
+
+<!-- Confetti container -->
+<canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
 
 <script>
+// Variables
 let noClicks = 0;
 const messages = [
-  "Are you sure?",
-  "Really sure??",
   "Baby please 🥺",
-  "Don’t break my heart 💔",
-  "I’m begging you 😭"
+  "I'm begging you 😭",
+  "Don't do this to me",
+  "Don't break my heart 💔",
+  "Babe, please",
+  "I'm on my knees",
+  "Please don't leave me",
+  "Noooo 😢",
+  "Please, think again",
+  "I can't live without you",
+  "Don't say no",
+  "You're my everything",
+  "Come back to me",
+  "I need you",
+  "Forgive me please"
 ];
 
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const sadImg = document.getElementById("sadImage");
+
+// Floating hearts
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.innerText = '❤️';
+  heart.style.left = yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth + 'px';
+  heart.style.top = yesBtn.offsetTop + 'px';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 3000);
+}
+
+// NO button click
 function noClicked() {
   noClicks++;
 
-  let yesBtn = document.getElementById("yes");
-  let noBtn = document.getElementById("no");
+  // Update NO text
+  if(noClicks <= messages.length) {
+    noBtn.innerText = messages[noClicks-1];
+  }
 
-  noBtn.innerText = messages[Math.min(noClicks, messages.length - 1)];
+  // Move NO button right and smooth
+  noBtn.style.transform = `translateX(${noClicks * 15}px)`;
 
-  let yesSize = 22 + noClicks * 10;
-  let noSize = Math.max(10, 20 - noClicks * 2);
+  // Shrink NO button
+  if(noClicks >= 5) {
+    let newWidth = Math.max(0, 150 - (noClicks-4)*25);
+    noBtn.style.width = newWidth + "px";
+    noBtn.style.opacity = newWidth > 0 ? 1 : 0; // fade out
+  }
 
-  yesBtn.style.fontSize = yesSize + "px";
-  noBtn.style.fontSize = noSize + "px";
+  // Hide NO completely under YES after 15 clicks
+  if(noClicks >= 15) {
+    noBtn.style.display = "none";
+  }
+
+  // Expand YES button horizontally
+  let newYesWidth = 150 + noClicks*20;
+  yesBtn.style.width = Math.min(newYesWidth, window.innerWidth - 50) + "px";
+
+  // Create floating hearts on YES
+  createHeart();
 }
 
+// YES button click
 function yesClicked() {
+  // Show happy message + GIF
   document.body.innerHTML = `
     <div style="text-align:center; padding-top:60px;">
       <h1>Yahhhh ❤️🌹🥳 🎉 ✨️</h1>
       <p>I love you..</p>
       <img src="happy.webp" style="max-width:90%; border-radius:20px;">
+      <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
     </div>
   `;
+  startConfetti();
+}
+
+/* Simple Confetti */
+function startConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const confettiCount = 100;
+  const confetti = [];
+  for(let i=0;i<confettiCount;i++){
+    confetti.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height-100,
+      r: Math.random()*6+4,
+      d: Math.random()*confettiCount,
+      color: `hsl(${Math.random()*360}, 100%, 50%)`,
+      tilt: Math.random()*10-10
+    });
+  }
+
+  let angle = 0;
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<confetti.length;i++){
+      let c = confetti[i];
+      ctx.beginPath();
+      ctx.lineWidth = c.r;
+      ctx.strokeStyle = c.color;
+      ctx.moveTo(c.x + c.tilt + angle, c.y);
+      ctx.lineTo(c.x + c.tilt, c.y + c.r*2);
+      ctx.stroke();
+    }
+    update();
+  }
+  function update() {
+    angle += 0.01;
+    for(let i=0;i<confetti.length;i++){
+      let c = confetti[i];
+      c.y += (Math.cos(angle + c.d) + 3 + c.r/2)/2;
+      c.x += Math.sin(angle);
+      if(c.y > canvas.height){
+        c.y = -10;
+        c.x = Math.random()*canvas.width;
+      }
+    }
+  }
+  setInterval(draw, 20);
 }
 </script>
 
