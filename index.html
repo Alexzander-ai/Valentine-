@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Will You Be My Valentine?</title>
+<title>Will You Be My Valentine🌹?</title>
 
 <style>
 body {
@@ -113,7 +113,7 @@ button {
 
 <body>
 
-<!-- 🎵 BACKGROUND MUSIC -->
+<!-- 🎵 BACKGROUND MUSIC (PERSISTENT, LOOP, FADE-IN) -->
 <audio id="bgMusic" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
@@ -131,11 +131,18 @@ button {
 <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
 <script>
-/* 🎵 START MUSIC ON FIRST TAP (MOBILE SAFE) */
+/* 🎵 PLAY MUSIC ON FIRST TAP + FADE IN */
 const bgMusic = document.getElementById("bgMusic");
+bgMusic.volume = 0;
 document.addEventListener("click", () => {
   if (bgMusic.paused) {
     bgMusic.play().catch(()=>{});
+    let vol = 0;
+    const fadeIn = setInterval(() => {
+      vol += 0.02;
+      if(vol >= 0.5) { vol = 0.5; clearInterval(fadeIn); }
+      bgMusic.volume = vol;
+    }, 100);
   }
 }, { once: true });
 
@@ -143,8 +150,8 @@ let noClicks = 0;
 
 const messages = [
   "No 😭","Please 🥺","Don’t 😫","Babe 😢",
-  "No 😭","Please 🥺","Don’t 😫","Babe 😢",
-  "No 😭","Please 🥺"
+  "I'm begging 😭","Please 🥺","I'd die 😫","Babe 😢",
+  "No 😭","Please 🥺","say yes 😫🤲","Ughhh 🙄😒😡"
 ];
 
 const yesBtn = document.getElementById("yes");
@@ -168,7 +175,6 @@ function noClicked() {
   noClicks++;
 
   noBtn.innerText = messages[noClicks - 1];
-
   yesBtn.style.width =
     Math.min(220 + noClicks * 18, window.innerWidth - 40) + "px";
 
@@ -176,11 +182,9 @@ function noClicked() {
 
   if (noClicks === 10) {
     const rect = noBtn.getBoundingClientRect();
-
     fist.style.display = "block";
     fist.style.setProperty("--hit-x", rect.left + "px");
     fist.style.setProperty("--hit-y", rect.top + "px");
-
     fist.style.animation = "fistPunch 0.9s ease-out forwards";
     yesBtn.style.animation = "yesBounce 0.6s";
     noBtn.style.animation = "noShake 0.6s";
@@ -200,7 +204,7 @@ function yesClicked() {
     yesBtn.style.width =
       Math.min(yesBtn.offsetWidth + 25, window.innerWidth - 40) + "px";
   } else {
-    document.body.innerHTML = `
+    document.body.innerHTML += `
       <div style="text-align:center;padding-top:60px;">
         <h1 style="font-size:5em;">Yahhhh ❤️🌹🥳✨</h1>
         <p style="font-size:3em;">I love you..</p>
