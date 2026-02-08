@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Will You Be My Valentine? 💖🥰</title>
+<title>Will You Be My Valentine? 💖🌹🥰</title>
 
 <style>
 body {
@@ -23,11 +23,13 @@ h1 {
     text-align: center;
 }
 
-/* GIF */
+/* INITIAL GIF */
 #sadImage {
-    max-width: 90%;
+    max-width: 95%;      /* Big GIF */
+    width: auto;
+    height: auto;
     border-radius: 22px;
-    margin-top: 35px;
+    margin-top: 50px;
 }
 
 /* BUTTON AREA */
@@ -107,6 +109,15 @@ button {
     50% { transform: translateX(12px); }
     75% { transform: translateX(-10px); }
     100% { transform: translateX(0); }
+}
+
+/* FINAL HAPPY GIF */
+#finalHappyImage {
+    max-width: 95%;   /* Very big happy GIF */
+    width: auto;
+    height: auto;
+    border-radius: 22px;
+    margin-top: 30px;
 }
 </style>
 </head>
@@ -208,7 +219,7 @@ yesBtn.addEventListener("click", ()=>{
   finalScreen.innerHTML = `
     <h1 style="font-size:5em;">Yahhhh ❤️🌹🥳✨</h1>
     <p style="font-size:3em;">I love you..</p>
-    <img src="happy.webp" style="max-width:90%;border-radius:22px;margin-top:30px;">
+    <img id="finalHappyImage" src="happy.webp" style="margin-top:30px;">
     <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
   `;
   document.body.appendChild(finalScreen);
