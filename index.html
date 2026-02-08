@@ -4,55 +4,81 @@
 <meta charset="UTF-8">
 <title>Will You Be My Valentine?</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: pink;
-  padding-top: 50px;
-  overflow-x: hidden;
-  position: relative;
-}
-h1 {
-  font-size: 2em;
-  margin-bottom: 20px;
-}
-img {
-  max-width: 90%;
-  border-radius: 20px;
-}
-button {
-  font-size: 20px;
-  padding: 15px 30px;
-  margin: 10px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.4s ease;
-}
-#yes {
-  background: red;
-  color: white;
-  font-size: 22px;
-  width: 150px;
-}
-#no {
-  background: white;
-  color: black;
-  width: 150px;
-}
+  body {
+    font-family: Arial, sans-serif;
+    background: pink;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-/* Floating hearts */
-.heart {
-  position: absolute;
-  font-size: 24px;
-  animation: float 3s linear infinite;
-}
-@keyframes float {
-  0% { transform: translateY(0) scale(1); opacity:1;}
-  50% { transform: translateY(-50px) scale(1.2); opacity:0.8;}
-  100% { transform: translateY(-100px) scale(1); opacity:0;}
-}
+  h1 {
+    font-size: 2em;
+    margin-top: 30px;
+  }
+
+  #sadImage {
+    max-width: 90%;
+    border-radius: 20px;
+    margin-top: 30px;
+  }
+
+  #buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px; /* space below GIF */
+    gap: 50px;
+  }
+
+  button {
+    font-size: 20px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.5s ease;
+  }
+
+  #yes {
+    background: red;
+    color: white;
+    width: 150px;
+    font-size: 22px;
+  }
+
+  #no {
+    background: white;
+    color: black;
+    width: 150px;
+  }
+
+  /* Fist animation */
+  #fist {
+    position: absolute;
+    width: 60px;
+    transform: scale(1);
+    right: 200px;
+    top: 0;
+    transition: all 0.8s ease;
+    display: none;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: float 3s linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0) scale(1); opacity:1;}
+    50% { transform: translateY(-50px) scale(1.2); opacity:0.8;}
+    100% { transform: translateY(-100px) scale(1); opacity:0;}
+  }
 </style>
 </head>
 <body>
@@ -60,36 +86,29 @@ button {
 <h1>Will you be my Valentine?</h1>
 <img src="sad.webp" alt="Please GIF" id="sadImage">
 
-<div style="margin-top:20px;">
+<div id="buttonContainer">
   <button id="yes" onclick="yesClicked()">YES 💖</button>
   <button id="no" onclick="noClicked()">NO 😭</button>
 </div>
+
+<img src="fist.png" id="fist" alt="fist">
 
 <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
 
 <script>
 let noClicks = 0;
 const messages = [
-  "Baby please 🥺",
-  "I'm begging you 😭",
-  "Don't do this to me",
+  "Please 😭",
+  "Don't do this 😢",
+  "I'm begging you 🥺",
   "Don't break my heart 💔",
   "Babe, please",
-  "I'm on my knees",
-  "Please don't leave me",
-  "Noooo 😢",
-  "Please, think again",
-  "I can't live without you",
-  "Don't say no",
-  "You're my everything",
-  "Come back to me",
-  "I need you",
-  "Forgive me please"
+  "I'm on my knees 🙏"
 ];
 
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
-const sadImg = document.getElementById("sadImage");
+const fist = document.getElementById("fist");
 
 // Floating hearts
 function createHeart() {
@@ -102,7 +121,6 @@ function createHeart() {
   setTimeout(() => heart.remove(), 3000);
 }
 
-// NO button click
 function noClicked() {
   noClicks++;
 
@@ -111,31 +129,38 @@ function noClicked() {
     noBtn.innerText = messages[noClicks-1];
   }
 
-  // Smoothly push NO to the right
-  noBtn.style.transform = `translateX(${noClicks*20}px)`;
-
-  // Shrink NO button gradually
+  // Smooth shrink
   if(noClicks >= 3) {
-    let newWidth = Math.max(0, 150 - (noClicks-2)*15);
+    let newWidth = Math.max(0, 150 - (noClicks-2)*20);
     noBtn.style.width = newWidth + "px";
-    noBtn.style.opacity = newWidth > 0 ? 1 : 0; // fade out
+    noBtn.style.opacity = newWidth > 0 ? 1 : 0;
   }
-
-  // Hide NO completely under YES after 15 clicks
-  if(noClicks >= 15) {
-    noBtn.style.display = "none";
-  }
-
-  // Expand YES button horizontally smoothly as NO shrinks
-  let maxWidth = window.innerWidth - 50; // max width near full screen
-  let newYesWidth = 150 + noClicks*25;
-  yesBtn.style.width = Math.min(newYesWidth, maxWidth) + "px";
 
   // Floating hearts
   createHeart();
+
+  // After 6 clicks → cinematic fist animation
+  if(noClicks === 6) {
+    // Show fist
+    fist.style.display = "block";
+    fist.style.top = yesBtn.offsetTop + "px";
+    fist.style.right = "200px";
+    // Animate fist to NO
+    setTimeout(() => {
+      fist.style.transform = "translateX(-180px) rotate(-20deg) scale(1.2)";
+      noBtn.style.transform = "translateX(200px) rotate(30deg)";
+      noBtn.style.opacity = 0;
+    }, 100); // slight delay
+    // After animation, hide NO, enlarge YES
+    setTimeout(() => {
+      noBtn.style.display = "none";
+      fist.style.display = "none";
+      yesBtn.style.width = "300px";
+      yesBtn.style.fontSize = "28px";
+    }, 1000);
+  }
 }
 
-// YES button click
 function yesClicked() {
   document.body.innerHTML = `
     <div style="text-align:center; padding-top:60px;">
@@ -197,100 +222,5 @@ function startConfetti() {
   setInterval(draw, 20);
 }
 </script>
-</body>
-</html>  noClicks++;
-
-  // Update NO text
-  if(noClicks <= messages.length) {
-    noBtn.innerText = messages[noClicks-1];
-  }
-
-  // Move NO button right and smooth
-  noBtn.style.transform = `translateX(${noClicks * 15}px)`;
-
-  // Shrink NO button
-  if(noClicks >= 5) {
-    let newWidth = Math.max(0, 150 - (noClicks-4)*25);
-    noBtn.style.width = newWidth + "px";
-    noBtn.style.opacity = newWidth > 0 ? 1 : 0; // fade out
-  }
-
-  // Hide NO completely under YES after 15 clicks
-  if(noClicks >= 15) {
-    noBtn.style.display = "none";
-  }
-
-  // Expand YES button horizontally
-  let newYesWidth = 150 + noClicks*20;
-  yesBtn.style.width = Math.min(newYesWidth, window.innerWidth - 50) + "px";
-
-  // Create floating hearts on YES
-  createHeart();
-}
-
-// YES button click
-function yesClicked() {
-  // Show happy message + GIF
-  document.body.innerHTML = `
-    <div style="text-align:center; padding-top:60px;">
-      <h1>Yahhhh ❤️🌹🥳 🎉 ✨️</h1>
-      <p>I love you..</p>
-      <img src="happy.webp" style="max-width:90%; border-radius:20px;">
-      <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
-    </div>
-  `;
-  startConfetti();
-}
-
-/* Simple Confetti */
-function startConfetti() {
-  const canvas = document.getElementById('confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const confettiCount = 100;
-  const confetti = [];
-  for(let i=0;i<confettiCount;i++){
-    confetti.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height-100,
-      r: Math.random()*6+4,
-      d: Math.random()*confettiCount,
-      color: `hsl(${Math.random()*360}, 100%, 50%)`,
-      tilt: Math.random()*10-10
-    });
-  }
-
-  let angle = 0;
-  function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0;i<confetti.length;i++){
-      let c = confetti[i];
-      ctx.beginPath();
-      ctx.lineWidth = c.r;
-      ctx.strokeStyle = c.color;
-      ctx.moveTo(c.x + c.tilt + angle, c.y);
-      ctx.lineTo(c.x + c.tilt, c.y + c.r*2);
-      ctx.stroke();
-    }
-    update();
-  }
-  function update() {
-    angle += 0.01;
-    for(let i=0;i<confetti.length;i++){
-      let c = confetti[i];
-      c.y += (Math.cos(angle + c.d) + 3 + c.r/2)/2;
-      c.x += Math.sin(angle);
-      if(c.y > canvas.height){
-        c.y = -10;
-        c.x = Math.random()*canvas.width;
-      }
-    }
-  }
-  setInterval(draw, 20);
-}
-</script>
-
 </body>
 </html>
