@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: pink;
+    padding-top: 100px;
+  }
+  h1 {
+    font-size: 2.5em;
+  }
+  button {
+    font-size: 20px;
+    padding: 15px 30px;
+    margin: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  #yes {
+    background: red;
+    color: white;
+    font-size: 22px;
+  }
+  #no {
+    background: white;
+    color: black;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Will you be my Valentine? 💘</h1>
+
+<button id="yes" onclick="yesClicked()">YES 💖</button>
+<button id="no" onclick="noClicked()">NO 😭</button>
+
+<script>
+let noClicks = 0;
+const messages = [
+  "Are you sure?",
+  "Really sure??",
+  "Baby please 🥺",
+  "Don’t break my heart 💔",
+  "I’m begging you 😭"
+];
+
+function noClicked() {
+  noClicks++;
+
+  let yesBtn = document.getElementById("yes");
+  let noBtn = document.getElementById("no");
+
+  noBtn.innerText = messages[Math.min(noClicks, messages.length - 1)];
+
+  let yesSize = 22 + noClicks * 10;
+  let noSize = Math.max(10, 20 - noClicks * 2);
+
+  yesBtn.style.fontSize = yesSize + "px";
+  noBtn.style.fontSize = noSize + "px";
+}
+
+function yesClicked() {
+  document.body.innerHTML = "<h1>YAAAY 💖🥰 I LOVE YOU!</h1>";
+}
+</script>
+
+</body>
+</html>
