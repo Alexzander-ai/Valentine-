@@ -29,7 +29,7 @@
   #buttonContainer {
     display: flex;
     justify-content: center;
-    margin-top: 80px; /* space below GIF */
+    margin-top: 100px; /* space below GIF */
     gap: 50px;
   }
 
@@ -41,6 +41,7 @@
     cursor: pointer;
     position: relative;
     transition: all 0.5s ease;
+    white-space: nowrap; /* prevents wrapping */
   }
 
   #yes {
@@ -61,7 +62,7 @@
     position: absolute;
     width: 60px;
     transform: scale(1);
-    right: 200px;
+    right: 0px;
     top: 0;
     transition: all 0.8s ease;
     display: none;
@@ -92,7 +93,7 @@
   <button id="no" onclick="noClicked()">NO 😭</button>
 </div>
 
-<!-- Fist image for cinematic effect -->
+<!-- Fist image -->
 <img src="fist.png" id="fist" alt="fist">
 
 <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
@@ -100,12 +101,16 @@
 <script>
 let noClicks = 0;
 const messages = [
-  "Please 😭",
-  "Don't do this 😢",
-  "I'm begging you 🥺",
-  "Don't break my heart 💔",
-  "Babe, please",
-  "I'm on my knees 🙏"
+  "Please",
+  "Babe",
+  "Pretty please",
+  "No!",
+  "No",
+  "Babe",
+  "Please",
+  "No!",
+  "Pretty",
+  "Babe!"
 ];
 
 const yesBtn = document.getElementById("yes");
@@ -132,40 +137,47 @@ function noClicked() {
     noBtn.innerText = messages[noClicks-1];
   }
 
-  // Smooth shrink
-  if(noClicks >= 2) {
-    let newWidth = Math.max(0, 150 - (noClicks-1)*20);
-    noBtn.style.width = newWidth + "px";
-    noBtn.style.opacity = newWidth > 0 ? 1 : 0;
-  }
+  // Shift NO right
+  let shiftAmount = Math.min(noClicks * 30, window.innerWidth/2 - 100); 
+  noBtn.style.transform = `translateX(${shiftAmount}px)`;
+
+  // Expand YES gradually
+  let yesWidth = 150 + noClicks * 20;
+  yesBtn.style.width = Math.min(yesWidth, window.innerWidth - 50) + "px";
 
   // Floating hearts
   createHeart();
 
-  // After 6 clicks → cinematic fist animation
-  if(noClicks === 6) {
-    // Show fist
+  // Fist animation triggers at 10th click
+  if(noClicks === 10) {
     fist.style.display = "block";
     fist.style.top = yesBtn.offsetTop + "px";
-    fist.style.right = "200px";
-    // Animate fist to NO
+    fist.style.right = "50px";
     setTimeout(() => {
-      fist.style.transform = "translateX(-180px) rotate(-20deg) scale(1.2)";
-      noBtn.style.transform = "translateX(200px) rotate(30deg)";
+      fist.style.transform = "translateX(-180px) rotate(-20deg) scale(1.5)";
+      noBtn.style.transform = "translateX(400px) rotate(30deg)";
       noBtn.style.opacity = 0;
     }, 100);
-    // After animation, hide NO, enlarge YES
     setTimeout(() => {
       noBtn.style.display = "none";
       fist.style.display = "none";
-      yesBtn.style.width = "300px";
+      yesBtn.style.width = window.innerWidth - 50 + "px";
       yesBtn.style.fontSize = "28px";
-    }, 1000);
+    }, 1200);
   }
 }
 
-// YES button click
+// YES click
 function yesClicked() {
+  // Each YES click pushes NO slightly
+  if(noBtn.style.display !== "none") {
+    let currentShift = parseInt(noBtn.style.transform.replace(/[^0-9\-]/g,'')) || 0;
+    let newShift = currentShift + 30;
+    noBtn.style.transform = `translateX(${newShift}px)`;
+    yesBtn.style.width = Math.min(yesBtn.offsetWidth + 20, window.innerWidth - 50) + "px";
+  }
+
+  // Show happy ending if clicked finally
   document.body.innerHTML = `
     <div style="text-align:center; padding-top:60px;">
       <h1>Yahhhh ❤️🌹🥳 🎉 ✨️</h1>
@@ -188,43 +200,4 @@ function startConfetti() {
   const confetti = [];
   for(let i=0;i<confettiCount;i++){
     confetti.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height-100,
-      r: Math.random()*6+4,
-      d: Math.random()*confettiCount,
-      color: `hsl(${Math.random()*360}, 100%, 50%)`,
-      tilt: Math.random()*10-10
-    });
-  }
-
-  let angle = 0;
-  function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0;i<confetti.length;i++){
-      let c = confetti[i];
-      ctx.beginPath();
-      ctx.lineWidth = c.r;
-      ctx.strokeStyle = c.color;
-      ctx.moveTo(c.x + c.tilt + angle, c.y);
-      ctx.lineTo(c.x + c.tilt, c.y + c.r*2);
-      ctx.stroke();
-    }
-    update();
-  }
-  function update() {
-    angle += 0.01;
-    for(let i=0;i<confetti.length;i++){
-      let c = confetti[i];
-      c.y += (Math.cos(angle + c.d) + 3 + c.r/2)/2;
-      c.x += Math.sin(angle);
-      if(c.y > canvas.height){
-        c.y = -10;
-        c.x = Math.random()*canvas.width;
-      }
-    }
-  }
-  setInterval(draw, 20);
-}
-</script>
-</body>
-</html>
+      x: Math.random()*canvas.width
