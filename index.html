@@ -2,231 +2,218 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>I Love You 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Will You Be My Valentine?</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  body {
-    margin: 0;
-    background: radial-gradient(circle at top, #ffdee9, #b5fffc);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at top, #ffb6c1, #ff4d6d);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
 
-  .container {
-    text-align: center;
-    width: 100%;
-    max-width: 420px;
-    padding: 20px;
-  }
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+}
 
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
-  }
+h1 {
+  font-size: 3rem;
+  color: white;
+  margin-bottom: 20px;
+}
 
-  img {
-    width: 100%;
-    max-width: 280px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-  }
+.gif {
+  width: 260px;
+  max-width: 80%;
+  border-radius: 20px;
+  margin-bottom: 25px;
+}
 
-  .buttons {
-    position: relative;
-    height: 140px;
-  }
+.buttons {
+  position: relative;
+  height: 120px;
+}
 
-  button {
-    font-size: 2rem;
-    padding: 18px 30px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    position: absolute;
-  }
+button {
+  border: none;
+  cursor: pointer;
+  padding: 20px 40px;
+  font-size: 1.6rem;
+  border-radius: 50px;
+  transition: all 0.5s ease;
+  position: absolute;
+}
 
-  #yes {
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ff4081;
-    color: white;
-    z-index: 2;
-  }
+#yes {
+  left: 50%;
+  transform: translateX(-50%);
+  background: #00e676;
+  color: #003d1f;
+  z-index: 2;
+}
 
-  #no {
-    right: 10%;
-    background: #ddd;
-  }
+#no {
+  right: 0;
+  background: #ff1744;
+  color: white;
+}
 
-  /* YES grows */
-  .yes-grow {
-    transform: translateX(-50%) scale(1.1);
-  }
+.fist {
+  position: absolute;
+  font-size: 5rem;
+  left: -120px;
+  top: -120px;
+  opacity: 0;
+  transform: rotate(-30deg);
+}
 
-  /* NO pushed */
-  .no-move {
-    transform: translateX(80px);
+@keyframes punch {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-30deg) scale(1);
   }
+  70% {
+    transform: translate(220px, 160px) rotate(0deg) scale(1.3);
+  }
+  100% {
+    transform: translate(240px, 180px) rotate(0deg) scale(1.2);
+  }
+}
 
-  /* FIST */
-  #fist {
-    position: absolute;
-    font-size: 4rem;
-    left: -60px;
-    top: -80px;
-    opacity: 0;
-    z-index: 5;
+@keyframes slowPunch {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-30deg) scale(1);
   }
+  100% {
+    transform: translate(260px, 190px) rotate(0deg) scale(1.6);
+  }
+}
 
-  .fist-hit {
-    animation: punch 0.45s ease-out forwards;
-  }
+@keyframes bounceYes {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.1); }
+  100% { transform: translateX(-50%) scale(1); }
+}
 
-  @keyframes punch {
-    0% {
-      opacity: 1;
-      transform: translate(0, 0) scale(1);
-    }
-    70% {
-      transform: translate(220px, 160px) scale(1.4);
-    }
-    100% {
-      transform: translate(240px, 180px) scale(1.2);
-      opacity: 0;
-    }
-  }
+.fullscreen-yes {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
+  font-size: 4rem !important;
+}
 
-  /* Impact flash */
-  .flash {
-    animation: flash 0.15s ease;
-  }
-
-  @keyframes flash {
-    from { background: white; }
-    to { background: radial-gradient(circle at top, #ffdee9, #b5fffc); }
-  }
-
-  /* Slow-mo final hit */
-  .slowmo {
-    animation-duration: 0.9s !important;
-  }
+.love-text {
+  font-size: 4rem;
+  color: white;
+  margin-top: 30px;
+  display: none;
+}
 </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>I love you 💖</h1>
 
-    <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="love gif"/>
+<audio id="bgMusic" loop>
+  <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Classical_Sampler/Kevin_MacLeod_-_Canon_in_D_Major.mp3" type="audio/mpeg">
+</audio>
 
-    <div class="buttons">
-      <button id="yes">YES 💕</button>
-      <button id="no">No 😫</button>
-      <div id="fist">✊</div>
-    </div>
+<div class="container">
+  <h1>Will you be my Valentine? 💖</h1>
+
+  <img class="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3Y2aGJ4Y3o4YjE0bHh1bWtzajc3YTZrY25vYW55OGN3YzZkZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/MDJ9IbxxvDUQM/giphy.gif" />
+
+  <div class="buttons">
+    <button id="yes">YES 💚</button>
+    <button id="no">NO 😤</button>
+    <div class="fist" id="fist">👊</div>
   </div>
 
+  <div class="love-text" id="loveText">I LOVE YOU ❤️</div>
+</div>
+
 <script>
-  const noTexts = [
-    "No 😫",
-    "No 😭",
-    "No 🥺",
-    "No 😣",
-    "No 😖",
-    "No 😩",
-    "No 😢",
-    "No 😰",
-    "No 😵",
-    "No 💀"
-  ];
+let noClicks = 0;
+const maxClicks = 10;
 
-  let count = 0;
-  const yes = document.getElementById("yes");
-  const no = document.getElementById("no");
-  const fist = document.getElementById("fist");
+const noTexts = [
+  "No 😤",
+  "No 🙄",
+  "No 😫",
+  "No 😠",
+  "No 😩",
+  "No 😒",
+  "No 😖",
+  "No 😤",
+  "No 😬",
+  "No 😱"
+];
 
-  /* Audio (safe for mobile) */
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const fist = document.getElementById("fist");
+const music = document.getElementById("bgMusic");
+const loveText = document.getElementById("loveText");
 
-  function punchSound() {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "square";
-    osc.frequency.value = 140;
-    gain.gain.value = 0.2;
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.08);
-  }
+// Start music on first interaction (mobile-safe)
+document.body.addEventListener("click", () => {
+  music.play().catch(()=>{});
+}, { once: true });
 
-  function backgroundTone() {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.value = 220;
-    gain.gain.value = 0.03;
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-  }
+noBtn.addEventListener("click", () => {
+  if (noClicks >= maxClicks) return;
 
-  document.body.addEventListener("click", () => {
-    if (ctx.state !== "running") {
-      ctx.resume();
-      backgroundTone();
-    }
-  }, { once: true });
+  noBtn.innerText = noTexts[noClicks];
+  noClicks++;
 
-  no.onclick = () => {
-    if (count >= 10) return;
+  const isFinal = noClicks === maxClicks;
 
-    punchSound();
+  fist.style.opacity = 1;
+  fist.style.animation = isFinal
+    ? "slowPunch 1.2s ease-out forwards"
+    : "punch 0.4s ease-out forwards";
 
-    no.textContent = noTexts[count];
+  yesBtn.style.animation = "bounceYes 0.4s";
 
-    yes.classList.add("yes-grow");
-    no.classList.add("no-move");
+  setTimeout(() => {
+    noBtn.style.transform = `translateX(${noClicks * 40}px)`;
+    yesBtn.style.transform = `translateX(-50%) scale(${1 + noClicks * 0.12})`;
+  }, isFinal ? 900 : 300);
 
-    fist.className = "fist-hit" + (count === 9 ? " slowmo" : "");
-
-    document.body.classList.add("flash");
-
+  if (isFinal) {
     setTimeout(() => {
-      yes.classList.remove("yes-grow");
-      no.classList.remove("no-move");
-      document.body.classList.remove("flash");
-      fist.className = "";
-    }, 600);
+      noBtn.style.display = "none";
+      yesBtn.classList.add("fullscreen-yes");
+      loveText.style.display = "block";
+    }, 1200);
+  }
 
-    count++;
+  setTimeout(() => {
+    fist.style.opacity = 0;
+    fist.style.animation = "";
+  }, isFinal ? 1400 : 600);
+});
 
-    if (count === 10) {
-      no.style.display = "none";
-      yes.style.width = "100%";
-      yes.style.left = "0";
-      yes.style.transform = "none";
-      yes.textContent = "YES 😍💖💍";
-    }
-  };
-
-  yes.onclick = () => {
-    document.body.innerHTML = `
-      <h1 style="font-size:3.5rem; text-align:center; margin-top:40vh;">
-        I knew it 😍💖
-      </h1>
-    `;
-  };
+yesBtn.addEventListener("click", () => {
+  yesBtn.classList.add("fullscreen-yes");
+  noBtn.style.display = "none";
+  loveText.style.display = "block";
+});
 </script>
+
 </body>
 </html>
